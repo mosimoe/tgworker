@@ -1,9 +1,10 @@
 -- 创建 Users 表
 CREATE TABLE users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    email TEXT NOT NULL UNIQUE,
-    password_hash TEXT NOT NULL,
-    name TEXT NOT NULL,
+    email TEXT,
+    password_hash TEXT,
+    name TEXT NOT NULL UNIQUE,
+    balance REAL NOT NULL DEFAULT 0.0, -- 账户余额
     role TEXT NOT NULL DEFAULT 'customer', -- 默认角色为 customer
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -14,7 +15,7 @@ CREATE TABLE products (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     description TEXT,
-    price INTEGER NOT NULL, -- 单位：分
+    price REAL NOT NULL,
     stock INTEGER NOT NULL DEFAULT 0,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -24,7 +25,7 @@ CREATE TABLE products (
 CREATE TABLE orders (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL,
-    total_amount INTEGER NOT NULL, -- 单位：分
+    total_amount REAL NOT NULL, -- 单位：分
     status TEXT NOT NULL DEFAULT 'pending', -- 默认状态为 pending
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -37,7 +38,7 @@ CREATE TABLE order_items (
     order_id INTEGER NOT NULL,
     product_id INTEGER NOT NULL,
     quantity INTEGER NOT NULL,
-    unit_price INTEGER NOT NULL, -- 订单时的单价，单位：分
+    unit_price REAL NOT NULL, -- 订单时的单价，单位：分
     FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE RESTRICT
 );

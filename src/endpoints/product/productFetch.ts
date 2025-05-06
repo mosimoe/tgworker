@@ -1,6 +1,6 @@
 import { Bool, OpenAPIRoute, Str } from "chanfana";
 import { z } from "zod";
-import { type AppContext, Product } from "../types";
+import { type AppContext, Product } from "../../types";
 
 export class ProductFetch extends OpenAPIRoute {
   schema = {
@@ -79,7 +79,6 @@ export class ProductFetch extends OpenAPIRoute {
         result: {
           product: {
             name: product.name,
-            slug: product.slug,
             description: product.description,
             price: product.price,
             stock: product.stock,

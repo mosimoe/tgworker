@@ -1,30 +1,30 @@
 import { Bool, OpenAPIRoute } from "chanfana";
 import { z } from "zod";
-import { type AppContext, Product } from "../types";
+import { type AppContext, User } from "../../types";
 
-// 定义 ProductCreate 类，继承 OpenAPIRoute
-export class ProductCreate extends OpenAPIRoute {
+// 定义 UserCreate 类，继承 OpenAPIRoute
+export class UserCreate extends OpenAPIRoute {
   schema = {
-    tags: ["Products"],
-    summary: "Create a new Product",
+    tags: ["Users"],
+    summary: "Create a new User",
     request: {
       body: {
         content: {
           "application/json": {
-            schema: Product.omit({ id: true, created_at: true, updated_at: true }), // 请求体中不包含 id、created_at 和 updated_at
+            schema: User.omit({ id: true, created_at: true, updated_at: true }), // 请求体中不包含 id、created_at 和 updated_at
           },
         },
       },
     },
     responses: {
       "200": {
-        description: "Returns the created product",
+        description: "Returns the created User",
         content: {
           "application/json": {
             schema: z.object({
               success: Bool(),
               result: z.object({
-                product: Product, // 返回完整的 Product，包括 id
+                User: User, // 返回完整的 User，包括 id
               }),
             }),
           },
@@ -61,46 +61,43 @@ export class ProductCreate extends OpenAPIRoute {
       const data = await this.getValidatedData<typeof this.schema>();
 
       // 提取验证后的请求体
-      const productToCreate = data.body;
+      const UserToCreate = data.body;
 
       // 插入数据到 D1 数据库
-      const { meta: { last_row_id: product_id } } = await c.env.DB.prepare(
-        "INSERT INTO products (name, description, price, stock) VALUES (?, ?, ?, ?)"
+      const { meta: { last_row_id: User_id } } = await c.env.DB.prepare(
+        "INSERT INTO Users (name, email, balance, role) VALUES (?, ?, ?, ?)"
       )
         .bind(
-          productToCreate.name,
-          productToCreate.description || null, // 如果 description 是 undefined，则存入 null
-          productToCreate.price,
-          productToCreate.stock || 0 // 如果 stock 是 undefined，使用默认值 0
+          UserToCreate.name,
+          UserToCreate.email || null, // 如果 description 是 undefined，则存入 null
+          UserToCreate.balance,
+          UserToCreate.role || 0 // 如果 stock 是 undefined，使用默认值 0
         )
         .run();
 
       // 查询刚插入的商品（包含自动生成的字段如 id、created_at 和 updated_at）
-      const { results } = await c.env.DB.prepare("SELECT * FROM products WHERE id = ?")
-        .bind(product_id)
+      const { results } = await c.env.DB.prepare("SELECT * FROM Users WHERE id = ?")
+        .bind(User_id)
         .all();
 
       if (!results || results.length === 0) {
         return {
           success: false,
-          error: "Failed to retrieve created product",
+          error: "Failed to retrieve created User",
         };
       }
 
-      const createdProduct = results[0];
+      const createdUser = results[0];
 
       // 返回创建的商品
       return {
         success: true,
         result: {
-          product: {
-            id: createdProduct.id, // 返回数据库生成的 id
-            name: createdProduct.name,
-            description: createdProduct.description,
-            price: createdProduct.price,
-            stock: createdProduct.stock,
-            created_at: createdProduct.created_at,
-            updated_at: createdProduct.updated_at,
+          User: {
+            id: createdUser.id, // 返回数据库生成的 id
+            name: createdUser.name,
+            created_at: createdUser.created_at,
+            updated_at: createdUser.updated_at,
           },
         },
       };

@@ -1,8 +1,8 @@
 import { Bool, Num, OpenAPIRoute } from "chanfana";
 import { z } from "zod";
-import { type AppContext, Product, Task } from "../types";
+import { type AppContext, Product, Task } from "../../types";
 
-export class TaskList extends OpenAPIRoute {
+export class ProductList extends OpenAPIRoute {
   schema = {
     tags: ["Products"],
     summary: "List Products", // 修正 summary，因为实际返回的是 products

@@ -1,6 +1,6 @@
 import { Bool, OpenAPIRoute, Str } from "chanfana";
 import { z } from "zod";
-import { type AppContext, Product } from "../types";
+import { type AppContext, Product } from "../../types";
 
 export class ProductDelete extends OpenAPIRoute {
   schema = {
