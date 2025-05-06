@@ -65,7 +65,7 @@ export class UserCreate extends OpenAPIRoute {
 
       // 插入数据到 D1 数据库
       const { meta: { last_row_id: User_id } } = await c.env.DB.prepare(
-        "INSERT INTO Users (name, email, balance, role) VALUES (?, ?, ?, ?)"
+        "INSERT INTO users (name, email, balance, role) VALUES (?, ?, ?, ?)"
       )
         .bind(
           UserToCreate.name,
@@ -76,7 +76,7 @@ export class UserCreate extends OpenAPIRoute {
         .run();
 
       // 查询刚插入的商品（包含自动生成的字段如 id、created_at 和 updated_at）
-      const { results } = await c.env.DB.prepare("SELECT * FROM Users WHERE id = ?")
+      const { results } = await c.env.DB.prepare("SELECT * FROM users WHERE id = ?")
         .bind(User_id)
         .all();
 

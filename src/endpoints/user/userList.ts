@@ -49,7 +49,7 @@ export class UserList extends OpenAPIRoute {
 
     try {
       // 构建 SQL 查询
-      let query = "SELECT * FROM Users";
+      let query = "SELECT * FROM users";
       const params = [];
       
       // 如果需要过滤（假设 Users 表有 is_active 字段，类似 completed）

@@ -25,7 +25,8 @@ CREATE TABLE products (
 CREATE TABLE orders (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL,
-    total_amount REAL NOT NULL, -- 单位：分
+    total_amount REAL NOT NULL,
+    address TEXT NOT NULL,
     status TEXT NOT NULL DEFAULT 'pending', -- 默认状态为 pending
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

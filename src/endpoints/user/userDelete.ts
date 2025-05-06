@@ -58,7 +58,7 @@ export class UserDelete extends OpenAPIRoute {
 
       // 查询商品是否存在
       const { results } = await c.env.DB.prepare(
-        "SELECT * FROM Users WHERE id = ?"
+        "SELECT * FROM users WHERE id = ?"
       )
         .bind(id)
         .all();
@@ -73,7 +73,7 @@ export class UserDelete extends OpenAPIRoute {
       const UserToDelete = results[0];
 
       // 从数据库中删除商品
-      await c.env.DB.prepare("DELETE FROM Users WHERE id = ?")
+      await c.env.DB.prepare("DELETE FROM users WHERE id = ?")
         .bind(id)
         .run();
 
